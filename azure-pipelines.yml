@@ -34,5 +34,5 @@ stages:
       inputs:
         targetPath: '$(Pipeline.Workspace)'
         artifact: 'drop'
-        publishLocation: 'pipeline'
-              
+        artifactType: 'filepath' 
+        fileSharePath: 'k6.js'
