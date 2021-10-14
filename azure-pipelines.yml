@@ -29,5 +29,10 @@ stages:
           sudo apt-get install k6
           sudo npm install -g k6-to-junit
           k6 run k6.js --summary-export=health_summary.json | k6-to-junit health_junit.xml           
-          cat health_summary.json
-          #cat health_junit.xml
+              cat health_summary.json
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'drop'
+        publishLocation: 'pipeline'
+              
