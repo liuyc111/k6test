@@ -21,6 +21,7 @@ stages:
       displayName: ' k6 '
       inputs: 
         targetType: 'inline'
+        workingDirectory: 'tt'
         script: |
           sudo apt-get update && sudo apt-get install ca-certificatWWes gnupg2 -y
           sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
@@ -32,7 +33,6 @@ stages:
               cat health_summary.json
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Pipeline.Workspace)'
+        targetPath: '$(Pipeline.Workspace)\tt'
         artifact: 'drop'
-        artifactType: 'filepath' 
-        fileSharePath: 'k6.js'
+        artifactType: 'pipeline' 
