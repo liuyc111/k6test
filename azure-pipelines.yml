@@ -1,0 +1,34 @@
+# This is a CD pipeline 
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+# When a new model is added to tenants, add that to the Powershell@2 task with profanity being default.
+# Need to add approvers in the environment Configuration project (dev_approve)
+# --Add the environment variable first and then click on the corresponding environment variable and then select the (Approvals and Checks) tab
+# --How to add environment variables please see this link(https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops#create-an-environment)
+# --How to add approver please see this link(https://docs.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops&tabs=check-pass#approvals)
+# Need to add wus_intpath/wus_mmlpath/eus_mmlpath in the variables 
+stages:
+- stage: Deploy_int
+  # variables:
+  # - template: int.yml # Name of the template file
+  jobs:
+  - job: Deploy_int
+    steps:
+    - task: Bash@3
+      displayName: ' k6 '
+      inputs: 
+        targetType: 'inline'
+        workingDirectory: '/tests/k6test'
+        script: |
+          sudo apt-get update && sudo apt-get install ca-certificatWWes gnupg2 -y
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+          sudo npm install -g k6-to-junit
+          k6 run k6.js --summary-export=health_summary.json | k6-to-junit health_junit.xml           
+          cat health_summary.json
+          #cat health_junit.xml
