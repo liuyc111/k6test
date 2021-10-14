@@ -33,6 +33,6 @@ stages:
               cat health_summary.json
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Pipeline.Workspace)/s/tt'
+        targetPath: '$(Pipeline.Workspace)/s/tt/health_summary.json'
         artifact: 'drop'
         artifactType: 'pipeline' 
